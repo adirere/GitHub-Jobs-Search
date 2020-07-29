@@ -10,7 +10,12 @@ export default function App() {
   const { jobs, loading, error } = useFetchJobs(params, page);
 
   return (
-    <Grid container justify="center" spacing={3}>
+    <Grid
+      container
+      justify="center"
+      spacing={3}
+      style={{ width: "75%", margin: "auto" }}
+    >
       {loading && <h1>loading...</h1>}
       {error && <h1>Error. Please refresh the page</h1>}
       {jobs.map(job => {
