@@ -9,11 +9,13 @@ import {
 } from "@material-ui/core";
 import "./styles.css";
 import JobsPagination from "./JobsPagination";
+import SearchFrom from "./SearchForm";
 
 const useStyles = makeStyles(theme => ({
   appTitle: {
     margin: "auto",
-    textAlign: "center"
+    textAlign: "center",
+    padding: "10px"
   },
   linearStyle: {
     position: "absolute",
@@ -36,6 +38,24 @@ export default function App() {
   const [page, setPage] = useState(1);
   const { jobs, loading, error, hasNextPage } = useFetchJobs(params, page);
 
+  function handleParamChange(e) {
+    const { checkedButton } = e;
+    let param, value;
+
+    if (checkedButton === undefined) {
+      param = e.target.name;
+      value = e.target.value;
+    } else {
+      param = "full_time";
+      value = checkedButton;
+    }
+
+    setPage(1);
+    setParams(prevParams => {
+      return { ...prevParams, [param]: value };
+    });
+  }
+
   return (
     <>
       {loading && <LinearProgress className={classes.linearStyle} />}
@@ -48,6 +68,9 @@ export default function App() {
         spacing={3}
         className={classes.mainContainer}
       >
+        <Grid item xs={12}>
+          <SearchFrom params={params} onParamChange={handleParamChange} />
+        </Grid>
         <Grid item xs={12}>
           <JobsPagination
             page={page}
