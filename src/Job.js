@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Grid,
   Card,
@@ -7,6 +7,7 @@ import {
   CardContent,
   CardActions,
   Button,
+  Collapse,
   Typography,
   Chip,
   makeStyles
@@ -16,13 +17,15 @@ import ReactMarkdown from "react-markdown";
 
 const useStyles = makeStyles({
   media: {
-    maxWidth: "260px",
+    paddingBottom: "10%",
+    transform: "scale(0.5)",
     height: "50px"
   }
 });
 
 export default function Job({ job }) {
   const classes = useStyles();
+  const [expanded, setExpanded] = useState(false);
 
   return (
     <Grid item xs={12}>
@@ -57,7 +60,7 @@ export default function Job({ job }) {
                 </Typography>
               }
             />
-            <CardContent>
+            <CardContent style={{ paddingBottom: "0px" }}>
               <Chip size="small" label={job.type} />{" "}
               <Chip size="small" label={job.location} />
               <Typography
@@ -76,16 +79,25 @@ export default function Job({ job }) {
               title={job.company}
             />
           </Grid>
-          <CardActions>
-            <Button variant="contained" color="primary">
-              <InfoTwoToneIcon style={{ marginRight: "3px" }} /> View Details
-            </Button>
-          </CardActions>
-          <CardContent>
-            <Typography variant="subtitle1" color="textSecondary">
-              <ReactMarkdown source={job.description} />
-            </Typography>
-          </CardContent>
+          <Grid item xs={12}>
+            <CardActions>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => setExpanded(prevState => !prevState)}
+              >
+                <InfoTwoToneIcon style={{ marginRight: "3px" }} />{" "}
+                {!expanded ? "View Details" : "Hide Details"}
+              </Button>
+            </CardActions>
+            <Collapse in={expanded} timeout="auto" unmountOnExit>
+              <CardContent>
+                <Typography variant="subtitle2" color="textSecondary">
+                  <ReactMarkdown source={job.description} />
+                </Typography>
+              </CardContent>
+            </Collapse>
+          </Grid>
         </Grid>
       </Card>
     </Grid>
